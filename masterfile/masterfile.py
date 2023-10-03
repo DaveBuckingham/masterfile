@@ -226,12 +226,14 @@ class Masterfile(object):
                     root_exception=e
                 ))
 
+    """
     def _read_data_csv(self, filename):
         df = pd.read_csv(
             filename,
             index_col=False,
             dtype={self.index_column: str})
         return df
+    """
 
     def column_components(self, column_name):
         column_parts = column_name.split('_')
@@ -254,9 +256,14 @@ def read_csv_no_alterations(csv_file):
     We also need na_filter=False or it'll gamely go and filter out NaNs
     as well. Sigh.
     """
-    df = pd.read_csv(csv_file, dtype=str, header=None, na_filter=False)
-    df = df.rename(
-        columns=df.iloc[0], copy=False).iloc[1:].reset_index(drop=True)
+    try:
+        df = pd.read_csv(csv_file, dtype=str, header=None, na_filter=False)
+        df = df.rename(columns=df.iloc[0], copy=False).iloc[1:].reset_index(drop=True)
+    except pd.errors.EmptyDataError as e:
+        # I'm not sure what is the best way to get this info into the errors list.
+        # Maybe this function should be a member of Masterfile? -db
+        logger.warning(f"Failed to read csv file {csv_file}: {e}. Creating empty data frame instead.")
+        df = pd.DataFrame()
     return df
 
 """
