@@ -50,7 +50,7 @@ class Annotator(object):
 
     def annotate_dataframe(self, df):
         df._metadata = list(self.dictionary.columns)
-        for series_name, series in df.iteritems():
+        for series_name, series in df.items():
             self.annotate_series(series)
 
     def make_series_annotations(self, series_name):

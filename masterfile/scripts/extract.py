@@ -54,7 +54,7 @@ def main(args):
     formatted = format_dataframe_for_masterfile(
         df, mf, extract_index_col, args.skip)
     with file_or_stdout(args.out_file) as output:
-        formatted.to_csv(output, line_terminator=LINE_ENDING)
+        formatted.to_csv(output, lineterminator=LINE_ENDING)
 
 
 @contextmanager
